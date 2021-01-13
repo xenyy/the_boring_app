@@ -9,8 +9,9 @@ abstract class SavedBoringServices {
   Future<List<BoringActivity>> getSavedBoringActivity();
   Future<void> addSavedBoringActivity(BoringActivity boringActivity);
   Future<void> removeSavedBoringActivity(String key);
-
   Future<void> toggleDoneSaved(String key);
+
+  Future<void> deleteAllSaved();
 }
 
 class SavedBoringActivityException implements Exception {
@@ -80,12 +81,8 @@ class SavedBoringService implements SavedBoringServices {
     if (random.nextDouble() < errorLikelihood) {
       throw const SavedBoringActivityException('Activity could not be saved');
     } else {
-      if (savedBoringActivitiesStorage.isNotEmpty) {
-        savedBoringActivitiesStorage = [...savedBoringActivitiesStorage]
-          ..add(boringActivity);
-      } else {
-        throw const SavedBoringActivityException('Activity could not be saved');
-      }
+      savedBoringActivitiesStorage = [...savedBoringActivitiesStorage]
+        ..add(boringActivity);
     }
   }
 
@@ -124,6 +121,17 @@ class SavedBoringService implements SavedBoringServices {
         }
         return activity;
       }).toList();
+    }
+  }
+
+  @override
+  Future<void> deleteAllSaved() async {
+    await _waitRandomTime();
+    if (random.nextDouble() < errorLikelihood) {
+      throw const SavedBoringActivityException(
+          'Could not delete saved activities');
+    } else {
+      savedBoringActivitiesStorage.clear();
     }
   }
 

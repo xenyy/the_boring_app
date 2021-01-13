@@ -15,7 +15,67 @@ class SavedScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              //Todo delete all saved boring activities
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  title: Row(
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: Colors.amber,
+                      ),
+                      SizedBox(width: 15),
+                      Text("Delete all"),
+                    ],
+                  ),
+                  content: Text(
+                      "Hey! are you sure you want to delete all saved activities?"),
+                  actionsPadding: EdgeInsets.fromLTRB(10, 0, 20, 5),
+                  actions: <Widget>[
+                    FlatButton(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.05),
+                      splashColor: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.2),
+                      child: Text(
+                        'Sure!',
+                        style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
+                      ),
+                      onPressed: () {
+                        context
+                            .read(savedBoringActivityProvider)
+                            .deleteAllSaved();
+                        context
+                            .read(savedBoringActivityProvider)
+                            .refreshSavedList();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    FlatButton(
+                      splashColor: Theme.of(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.2),
+                      child: Text(
+                        'Nope',
+                        style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ),
+              );
             },
             splashRadius: 27,
           ),
@@ -37,26 +97,38 @@ class SavedScreen extends StatelessWidget {
           SavedTitle(),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () => context.read(savedBoringActivityProvider).refreshSavedList(),
+              onRefresh: () =>
+                  context.read(savedBoringActivityProvider).refreshSavedList(),
               child: Consumer(
                 builder: (context, watch, child) {
                   final saved = watch(savedProvider);
                   return saved.when(
                     data: (saved) {
-                      return ListView(children: [
-                        ...saved
-                            .map(
-                              (item) => SavedActivity(
-                                item: item,
-                                onDismissed: (direction) =>
-                                    dismissItem(context, item.key, direction),
-                              ),
-                            )
-                            .toList(),
-                      ]);
+                      if (saved.isEmpty) {
+                        return Center(
+                          child: Text(
+                              'You should start saving activities for later!!'),
+                        );
+                      } else {
+                        return ListView(
+                          children: [
+                            ...saved
+                                .map(
+                                  (item) => SavedActivity(
+                                    item: item,
+                                    onDismissed: (direction) => dismissItem(
+                                        context, item.key, direction),
+                                  ),
+                                )
+                                .toList(),
+                          ],
+                        );
+                      }
                     },
                     loading: () => Center(child: CircularProgressIndicator()),
-                    error: (e, s) => _Error(message: 'Saved Boring Activities could not be load :('),
+                    error: (e, s) => _Error(
+                        message:
+                            'Saved Boring Activities could not be load :('),
                   );
                 },
               ),
@@ -70,7 +142,9 @@ class SavedScreen extends StatelessWidget {
   void dismissItem(BuildContext context, itemKey, DismissDirection direction) {
     switch (direction) {
       case DismissDirection.endToStart:
-        context.read(savedBoringActivityProvider).removeSavedBoringActivity(itemKey);
+        context
+            .read(savedBoringActivityProvider)
+            .removeSavedBoringActivity(itemKey);
         break;
       default:
         //Nothing will happen :D
@@ -173,7 +247,9 @@ class _Error extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               onPressed: () async {
-                context.read(savedBoringActivityProvider).retryGetSavedBoringList();
+                context
+                    .read(savedBoringActivityProvider)
+                    .retryGetSavedBoringList();
               },
               child: Text(
                 'Try again',

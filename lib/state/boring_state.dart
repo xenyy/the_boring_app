@@ -138,8 +138,8 @@ class SavedBoringNotifier
 
   Future<void> removeSavedBoringActivity(String key) async {
     _cacheState();
-    state = state.whenData(
-        (value) => value.where((element) => element.key != key).toList());
+    state = state
+        .whenData((value) => value.where((item) => item.key != key).toList());
     try {
       await read(savedBoringServiceProvider).removeSavedBoringActivity(key);
     } on SavedBoringActivityException catch (e) {
@@ -171,6 +171,19 @@ class SavedBoringNotifier
 
     try {
       await read(savedBoringServiceProvider).toggleDoneSaved(key);
+    } on SavedBoringActivityException catch (e) {
+      _handleException(e);
+    }
+  }
+
+  Future<void> deleteAllSaved() async {
+    _cacheState();
+    AsyncValue<List<BoringActivity>> list;
+
+    state = list;
+
+    try {
+      await read(savedBoringServiceProvider).deleteAllSaved();
     } on SavedBoringActivityException catch (e) {
       _handleException(e);
     }
