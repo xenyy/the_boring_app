@@ -4,8 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SavedScreen extends StatelessWidget {
+class SavedScreen extends StatefulWidget {
   static const String routeName = '/saved';
+
+  @override
+  _SavedScreenState createState() => _SavedScreenState();
+}
+
+class _SavedScreenState extends State<SavedScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read(savedBoringActivityProvider).getSavedBoringActivities();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,11 +127,11 @@ class SavedScreen extends StatelessWidget {
                             ...saved
                                 .map(
                                   (item) => SavedActivity(
-                                    item: item,
-                                    onDismissed: (direction) => dismissItem(
-                                        context, item.key, direction),
-                                  ),
-                                )
+                                item: item,
+                                onDismissed: (direction) => dismissItem(
+                                    context, item.key, direction),
+                              ),
+                            )
                                 .toList(),
                           ],
                         );
@@ -128,7 +140,7 @@ class SavedScreen extends StatelessWidget {
                     loading: () => Center(child: CircularProgressIndicator()),
                     error: (e, s) => _Error(
                         message:
-                            'Saved Boring Activities could not be load :('),
+                        'Saved Boring Activities could not be load :('),
                   );
                 },
               ),
@@ -147,7 +159,7 @@ class SavedScreen extends StatelessWidget {
             .removeSavedBoringActivity(itemKey);
         break;
       default:
-        //Nothing will happen :D
+      //Nothing will happen :D
         break;
     }
   }

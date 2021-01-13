@@ -10,7 +10,6 @@ abstract class SavedBoringServices {
   Future<void> addSavedBoringActivity(BoringActivity boringActivity);
   Future<void> removeSavedBoringActivity(String key);
   Future<void> toggleDoneSaved(String key);
-
   Future<void> deleteAllSaved();
 }
 
@@ -54,8 +53,7 @@ final _savedBoringActivities = [
 
 class SavedBoringService implements SavedBoringServices {
   SavedBoringService() : random = Random() {
-    savedBoringActivitiesStorage = [];
-    savedBoringActivitiesStorage..addAll(_savedBoringActivities);
+    savedBoringActivitiesStorage = [..._savedBoringActivities];
     //getSavedBoringActivity()
   }
 

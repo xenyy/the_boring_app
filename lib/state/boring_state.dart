@@ -96,23 +96,31 @@ class SavedBoringNotifier
 
   Future<void> addSavedBoringActivity() async {
     _cacheState(); //save state before change it
-    BoringActivity activityShowing;
     bool repeated = false;
     BoringActivity toSaveActivity;
 
-    read(boringActivityProvider.state)
-        .whenData((value) => activityShowing = value);
-
-    toSaveActivity = BoringActivity(
-      activity: activityShowing.activity,
-      type: activityShowing.type,
-      participants: activityShowing.participants,
-      price: activityShowing.price,
-      link: activityShowing.link,
-      key: activityShowing.key,
-      accessibility: activityShowing.accessibility,
-      saved: true,
-    );
+    read(boringActivityProvider.state).whenData((value) {
+      toSaveActivity = BoringActivity(
+        activity: value.activity,
+        type: value.type,
+        participants: value.participants,
+        price: value.price,
+        link: value.link,
+        key: value.key,
+        accessibility: value.accessibility,
+        saved: true,
+      );
+      state.whenData((saved) {
+        if (saved.map((e) => e.key).contains(toSaveActivity.key)) {
+          repeated = true;
+          _handleException(
+              SavedBoringActivityException('You already saved this activity'));
+          state = AsyncValue.data([...saved]);
+        } else {
+          state = AsyncValue.data([...saved]..add(toSaveActivity));
+        }
+      });
+    });
 
     state = state.whenData((saved) {
       if (saved.map((e) => e.key).contains(toSaveActivity.key)) {
