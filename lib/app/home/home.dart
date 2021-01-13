@@ -51,23 +51,22 @@ class HomeScreen extends StatelessWidget {
           BuildContext context,
           StateController<SavedBoringActivityException> exceptionState,
         ) {
-          if (exceptionState.state.error.toString().isNotEmpty) {
-            Flushbar(
-              message: exceptionState.state.error.toString(),
-              //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-              icon: Icon(
-                Icons.error_outline_rounded,
-                size: 27.0,
-                color: Colors.red,
-              ),
-              flushbarStyle: FlushbarStyle.FLOATING,
-              margin: EdgeInsets.all(20),
-              borderRadius: 8,
-              duration: Duration(seconds: 3),
-              animationDuration: Duration(milliseconds: 200),
-              leftBarIndicatorColor: Colors.red,
-            )..show(context);
-          }
+          Flushbar(
+            message: exceptionState.state.error.toString(),
+            isDismissible: false,
+            //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+            icon: Icon(
+              Icons.error_outline_rounded,
+              size: 27.0,
+              color: Colors.red,
+            ),
+            flushbarStyle: FlushbarStyle.FLOATING,
+            margin: EdgeInsets.all(20),
+            borderRadius: 8,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 200),
+            leftBarIndicatorColor: Colors.red,
+          )..show(context);
         },
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 20, 0, 40),

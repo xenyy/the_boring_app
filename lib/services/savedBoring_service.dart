@@ -98,8 +98,7 @@ class SavedBoringService implements SavedBoringServices {
   Future<void> toggleDoneSaved(String key) async {
     await _waitRandomTime();
     if (random.nextDouble() < errorLikelihood) {
-      throw const SavedBoringActivityException(
-          'Activity could not be mark as done');
+      throw const SavedBoringActivityException('Activity could not be toggled');
     } else {
       savedBoringActivitiesStorage =
           savedBoringActivitiesStorage.map((activity) {

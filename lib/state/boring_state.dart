@@ -175,9 +175,10 @@ class SavedBoringNotifier
 
   Future<void> deleteAllSaved() async {
     _cacheState();
-    state = state.whenData((savedList) {
-      savedList.clear();
-      return savedList;
+    List<BoringActivity> list = [];
+
+    state.whenData((savedList) {
+      state = AsyncValue.data(list);
     });
 
     try {
