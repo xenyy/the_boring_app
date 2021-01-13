@@ -51,8 +51,9 @@ class HomeScreen extends StatelessWidget {
           BuildContext context,
           StateController<SavedBoringActivityException> exceptionState,
         ) {
+          if (exceptionState.state.error.toString().isNotEmpty) {
             Flushbar(
-              message:  exceptionState.state.error.toString(),
+              message: exceptionState.state.error.toString(),
               //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
               icon: Icon(
                 Icons.error_outline_rounded,
@@ -66,6 +67,7 @@ class HomeScreen extends StatelessWidget {
               animationDuration: Duration(milliseconds: 200),
               leftBarIndicatorColor: Colors.red,
             )..show(context);
+          }
         },
         child: Padding(
           padding: EdgeInsets.fromLTRB(0, 20, 0, 40),
@@ -290,7 +292,27 @@ class BoringButtonSave extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(vertical: 15),
       onPressed: () {
-        context.read(savedBoringActivityProvider).addSavedBoringActivity();
+        context
+            .read(savedBoringActivityProvider)
+            .addSavedBoringActivity()
+            .whenComplete(() => Flushbar(
+                  message: 'Activity saved',
+                  //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  icon: Icon(
+                    Icons.tag_faces_rounded,
+                    size: 27.0,
+                    color: Theme.of(context)
+                        .colorScheme
+                        .background
+                        .withOpacity(0.5),
+                  ),
+                  flushbarStyle: FlushbarStyle.FLOATING,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: 8,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 200),
+                  leftBarIndicatorColor: Colors.green,
+                )..show(context));
       },
       child: Icon(
         Icons.bookmark,

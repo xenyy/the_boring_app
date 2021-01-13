@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:the_boring_app/models/boringActivity_model.dart';
 import 'package:the_boring_app/state/boring_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,61 +30,7 @@ class _SavedScreenState extends State<SavedScreen> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  title: Row(
-                    children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        color: Colors.amber,
-                      ),
-                      SizedBox(width: 15),
-                      Text("Delete all"),
-                    ],
-                  ),
-                  content: Text(
-                      "Hey! are you sure you want to delete all saved activities?"),
-                  actionsPadding: EdgeInsets.fromLTRB(10, 0, 20, 5),
-                  actions: <Widget>[
-                    FlatButton(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.05),
-                      splashColor: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.2),
-                      child: Text(
-                        'Sure!',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
-                      ),
-                      onPressed: () {
-                        context
-                            .read(savedBoringActivityProvider)
-                            .deleteAllSaved();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FlatButton(
-                      splashColor: Theme.of(context)
-                          .colorScheme
-                          .onBackground
-                          .withOpacity(0.2),
-                      child: Text(
-                        'Nope',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
+                builder: (context) => DeleteAllAlertDialog(),
               );
             },
             splashRadius: 27,
@@ -115,6 +62,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     data: (saved) {
                       if (saved.isEmpty) {
                         return Center(
+                          // Todo put this prettier
                           child: Text(
                               'You should start saving activities for later!!'),
                         );
@@ -124,11 +72,11 @@ class _SavedScreenState extends State<SavedScreen> {
                             ...saved
                                 .map(
                                   (item) => SavedActivity(
-                                item: item,
-                                onDismissed: (direction) => dismissItem(
-                                    context, item.key, direction),
-                              ),
-                            )
+                                    item: item,
+                                    onDismissed: (direction) => dismissItem(
+                                        context, item.key, direction),
+                                  ),
+                                )
                                 .toList(),
                           ],
                         );
@@ -137,7 +85,7 @@ class _SavedScreenState extends State<SavedScreen> {
                     loading: () => Center(child: CircularProgressIndicator()),
                     error: (e, s) => _Error(
                         message:
-                        'Saved Boring Activities could not be load :('),
+                            'Saved Boring Activities could not be load :('),
                   );
                 },
               ),
@@ -153,12 +101,103 @@ class _SavedScreenState extends State<SavedScreen> {
       case DismissDirection.endToStart:
         context
             .read(savedBoringActivityProvider)
-            .removeSavedBoringActivity(itemKey);
+            .removeSavedBoringActivity(itemKey)
+            .whenComplete(
+              () => Flushbar(
+                message: 'Activity deleted',
+                //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                icon: Icon(
+                  Icons.delete_forever_rounded,
+                  size: 27.0,
+                  color: Colors.redAccent,
+                ),
+                flushbarStyle: FlushbarStyle.FLOATING,
+                margin: EdgeInsets.all(20),
+                borderRadius: 8,
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 200),
+                leftBarIndicatorColor: Colors.redAccent,
+              )..show(context),
+            );
+
         break;
       default:
-      //Nothing will happen :D
+        //Nothing will happen :D
         break;
     }
+  }
+}
+
+class DeleteAllAlertDialog extends StatelessWidget {
+  const DeleteAllAlertDialog({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Row(
+        children: [
+          Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.amber,
+          ),
+          SizedBox(width: 15),
+          Text("Delete all"),
+        ],
+      ),
+      content:
+          Text("Hey! are you sure you want to delete all saved activities?"),
+      actionsPadding: EdgeInsets.fromLTRB(10, 0, 20, 5),
+      actions: <Widget>[
+        FlatButton(
+          color: Theme.of(context).colorScheme.onBackground.withOpacity(0.05),
+          splashColor:
+              Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
+          child: Text(
+            'Sure!',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ),
+          onPressed: () {
+            context
+                .read(savedBoringActivityProvider)
+                .deleteAllSaved()
+                .whenComplete(() => Flushbar(
+                      message: 'All activities deleted',
+                      //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                      icon: Icon(
+                        Icons.delete_forever_rounded,
+                        size: 27.0,
+                        color: Colors.redAccent,
+                      ),
+                      flushbarStyle: FlushbarStyle.FLOATING,
+                      margin: EdgeInsets.all(20),
+                      borderRadius: 8,
+                      duration: Duration(seconds: 3),
+                      animationDuration: Duration(milliseconds: 200),
+                      leftBarIndicatorColor: Colors.redAccent,
+                    )..show(context));
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+          splashColor:
+              Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
+          child: Text(
+            'Nope',
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    );
   }
 }
 
@@ -206,7 +245,42 @@ class SavedActivity extends StatelessWidget {
           onChanged: (_) {
             context
                 .read(savedBoringActivityProvider)
-                .toggleDoneSavedBoringActivity(item.key);
+                .toggleDoneSavedBoringActivity(item.key)
+                .whenComplete(() {
+              if (!item.done) {
+                Flushbar(
+                  message: 'Activity done',
+                  //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  icon: Icon(
+                    Icons.done_all_rounded,
+                    size: 27.0,
+                    color: Colors.green,
+                  ),
+                  flushbarStyle: FlushbarStyle.FLOATING,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: 8,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 200),
+                  leftBarIndicatorColor: Colors.green,
+                )..show(context);
+              } else {
+                Flushbar(
+                  message: 'Activity undone',
+                  //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  icon: Icon(
+                    Icons.clear,
+                    size: 27.0,
+                    color: Colors.amber,
+                  ),
+                  flushbarStyle: FlushbarStyle.FLOATING,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: 8,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 200),
+                  leftBarIndicatorColor: Colors.amber,
+                )..show(context);
+              }
+            });
           },
         ),
         focusColor: Colors.red,
