@@ -122,17 +122,6 @@ class SavedBoringNotifier
       });
     });
 
-    state = state.whenData((saved) {
-      if (saved.map((e) => e.key).contains(toSaveActivity.key)) {
-        repeated = true;
-        _handleException(
-            SavedBoringActivityException('You already saved this activity'));
-        return [...saved];
-      } else {
-        return [...saved]..add(toSaveActivity);
-      }
-    });
-
     try {
       if (!repeated) {
         await read(savedBoringServiceProvider)
@@ -186,9 +175,11 @@ class SavedBoringNotifier
 
   Future<void> deleteAllSaved() async {
     _cacheState();
-    AsyncValue<List<BoringActivity>> list;
 
-    state = list;
+    state = state.whenData((savedList) {
+      savedList.clear();
+      return savedList;
+    });
 
     try {
       await read(savedBoringServiceProvider).deleteAllSaved();

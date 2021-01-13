@@ -65,9 +65,6 @@ class _SavedScreenState extends State<SavedScreen> {
                         context
                             .read(savedBoringActivityProvider)
                             .deleteAllSaved();
-                        context
-                            .read(savedBoringActivityProvider)
-                            .refreshSavedList();
                         Navigator.of(context).pop();
                       },
                     ),
