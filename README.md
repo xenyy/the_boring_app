@@ -10,6 +10,8 @@ The app has theming, routing, riverpod state managment, api call, error catching
 
 Shout-out to https://www.boredapi.com/ is the one I use to show the activities.
 
+I'm new at flutter but I think the code is kinda well written and organized.
+
 ### Todo's
 
 - Store saved activities locally
