@@ -1,4 +1,4 @@
-import 'package:the_boring_app/models/savedBoringActivity_model.dart';
+import 'package:the_boring_app/models/boringActivity_model.dart';
 import 'package:the_boring_app/state/boring_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,15 +40,16 @@ class SavedScreen extends StatelessWidget {
               onRefresh: () => context.read(savedBoringActivityProvider).refreshSavedList(),
               child: Consumer(
                 builder: (context, watch, child) {
-                  final saved = watch(savedBoringActivityProvider.state);
+                  final saved = watch(savedProvider);
                   return saved.when(
                     data: (saved) {
                       return ListView(children: [
                         ...saved
                             .map(
-                              (item) =>  SavedActivity(
+                              (item) => SavedActivity(
                                 item: item,
-                                onDismissed: (direction) => dismissItem(context, item.key, direction),
+                                onDismissed: (direction) =>
+                                    dismissItem(context, item.key, direction),
                               ),
                             )
                             .toList(),
@@ -105,7 +106,7 @@ class SavedActivity extends StatelessWidget {
     @required this.onDismissed,
   }) : super(key: key);
 
-  final SavedBoringActivity item;
+  final BoringActivity item;
   final DismissDirectionCallback onDismissed;
 
   @override

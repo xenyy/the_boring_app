@@ -1,13 +1,15 @@
 import 'dart:math';
 
-import 'package:the_boring_app/models/savedBoringActivity_model.dart';
+import 'package:the_boring_app/models/boringActivity_model.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final savedBoringServiceProvider = Provider<SavedBoringService>((ref) => SavedBoringService());
 
 abstract class SavedBoringServices {
-  //Future<List<SavedBoringActivity>> getSavedBoringActivity();
-  Future<void> addSavedBoringActivity(SavedBoringActivity boringActivity);
+  Future<List<BoringActivity>> getSavedBoringActivity();
+
+  Future<void> addSavedBoringActivity(BoringActivity boringActivity);
+
   Future<void> removeSavedBoringActivity(String key);
 }
 
@@ -26,7 +28,7 @@ class SavedBoringActivityException implements Exception {
 const double errorLikelihood = 0.0;
 
 final _savedBoringActivities = [
-  SavedBoringActivity(
+  BoringActivity(
     activity: "Explore a park you have never been to before",
     type: "recreational",
     participants: 1,
@@ -36,7 +38,7 @@ final _savedBoringActivities = [
     accessibility: 0,
     saved: true,
   ),
-  SavedBoringActivity(
+  BoringActivity(
     activity: "Text a friend you haven't talked to in a long time",
     type: "social",
     participants: 2,
@@ -52,33 +54,35 @@ class SavedBoringService implements SavedBoringServices {
   SavedBoringService() : random = Random() {
     savedBoringActivitiesStorage = [];
     savedBoringActivitiesStorage..addAll(_savedBoringActivities);
-  //getSavedBoringActivity()
+    //getSavedBoringActivity()
   }
 
   final Random random;
-  List<SavedBoringActivity> savedBoringActivitiesStorage;
-
- @override
- Future<List<SavedBoringActivity>> getSavedBoringActivity() async {
-   await _waitRandomTime();
-   // retrieving mock storage
-   if (random.nextDouble() < errorLikelihood) {
-     throw const SavedBoringActivityException('Saved boring activities could not be return');
-   } else {
-     return savedBoringActivitiesStorage;
-   }
- }
+  List<BoringActivity> savedBoringActivitiesStorage;
 
   @override
-  Future<void> addSavedBoringActivity(SavedBoringActivity boringActivity) async {
+  Future<List<BoringActivity>> getSavedBoringActivity() async {
+    await _waitRandomTime();
+    // retrieving mock storage
+    if (random.nextDouble() < errorLikelihood) {
+      throw const SavedBoringActivityException(
+          'Saved boring activities could not be return');
+    } else {
+      return savedBoringActivitiesStorage;
+    }
+  }
+
+  @override
+  Future<void> addSavedBoringActivity(BoringActivity boringActivity) async {
     await _waitRandomTime();
     // add to storage
     if (random.nextDouble() < 0.0) {
       throw const SavedBoringActivityException('Activity could not be saved');
     } else {
-      if(savedBoringActivitiesStorage.isNotEmpty){
-        savedBoringActivitiesStorage = [...savedBoringActivitiesStorage]..add(boringActivity);
-      }else{
+      if (savedBoringActivitiesStorage.isNotEmpty) {
+        savedBoringActivitiesStorage = [...savedBoringActivitiesStorage]
+          ..add(boringActivity);
+      } else {
         throw const SavedBoringActivityException('Activity could not be saved');
       }
     }

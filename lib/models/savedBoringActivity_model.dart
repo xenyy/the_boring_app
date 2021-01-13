@@ -1,4 +1,4 @@
-class SavedBoringActivity {
+/*class SavedBoringActivity {
   SavedBoringActivity({
     this.activity,
     this.type,
@@ -19,4 +19,4 @@ class SavedBoringActivity {
   final double accessibility;
   final bool saved;
 
-}
+}*/

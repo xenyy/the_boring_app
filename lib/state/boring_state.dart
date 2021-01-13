@@ -1,5 +1,4 @@
 import 'package:the_boring_app/models/boringActivity_model.dart';
-import 'package:the_boring_app/models/savedBoringActivity_model.dart';
 import 'package:the_boring_app/services/boring_exceptions.dart';
 import 'package:the_boring_app/services/boring_service.dart';
 import 'package:the_boring_app/services/savedBoring_service.dart';
@@ -40,10 +39,11 @@ class BoringNotifier extends StateNotifier<AsyncValue<BoringActivity>> {
 }
 
 //saved
-//final savedProvider = Provider<AsyncValue<List<SavedBoringActivity>>>((ref) {
-//  final savedState = ref.watch(savedBoringActivityProvider.state);
-//  return savedState.whenData((saved) => saved.where((savedState) => savedState.saved).toList());
-//});
+final savedProvider = Provider<AsyncValue<List<BoringActivity>>>((ref) {
+  final savedState = ref.watch(savedBoringActivityProvider.state);
+  return savedState.whenData(
+      (saved) => saved.where((savedState) => savedState.saved).toList());
+});
 
 final savedBoringActivityProvider = StateNotifierProvider<SavedBoringNotifier>(
     (ref) => SavedBoringNotifier(ref.read));
@@ -54,14 +54,14 @@ final savedExceptionProvider =
 });
 
 class SavedBoringNotifier
-    extends StateNotifier<AsyncValue<List<SavedBoringActivity>>> {
-  SavedBoringNotifier(this.read, [AsyncValue<List<SavedBoringActivity>> saved])
+    extends StateNotifier<AsyncValue<List<BoringActivity>>> {
+  SavedBoringNotifier(this.read, [AsyncValue<List<BoringActivity>> saved])
       : super(saved ?? const AsyncValue.loading()) {
     getSavedBoringActivities();
   }
 
   final Reader read;
-  AsyncValue<List<SavedBoringActivity>> previousState;
+  AsyncValue<List<BoringActivity>> previousState;
 
   Future<void> getSavedBoringActivities() async {
     try {
@@ -100,13 +100,12 @@ class SavedBoringNotifier
     _cacheState(); //save state before change it
     BoringActivity activityShowing;
     bool repeated = false;
-    SavedBoringActivity toSaveActivity;
+    BoringActivity toSaveActivity;
 
     read(boringActivityProvider.state)
         .whenData((value) => activityShowing = value);
-    print(activityShowing);
 
-    toSaveActivity = SavedBoringActivity(
+    toSaveActivity = BoringActivity(
       activity: activityShowing.activity,
       type: activityShowing.type,
       participants: activityShowing.participants,
