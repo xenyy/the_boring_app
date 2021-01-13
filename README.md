@@ -15,7 +15,7 @@ I'm new at flutter but I think the code is kinda well written and organized.
 ### Todo's
 
 - Store saved activities locally
-- Mark as done the activities
+- Mark as done the activities (done)
 - Mark all done option
-- Delete all option
+- Delete all option (done)
 - Media query
