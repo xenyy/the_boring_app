@@ -119,9 +119,11 @@ class SavedActivity extends StatelessWidget {
       secondaryBackground: buildRightSwipe(context),
       child: ListTile(
         leading: Checkbox(
-          value: false, //todo.completed,
+          value: item.done,
           onChanged: (_) {
-            //context.read(todosNotifierProvider).toggle(todo.id);
+            context
+                .read(savedBoringActivityProvider)
+                .toggleDoneSavedBoringActivity(item.key);
           },
         ),
         focusColor: Colors.red,

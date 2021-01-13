@@ -76,10 +76,9 @@ class SavedBoringNotifier
   Future<void> retryGetSavedBoringList() async {
     state = AsyncValue.loading();
     try {
-      state = state.whenData(
-              (value) => value.where((element) => element.saved).toList());
-      //final savedBoringActivity = await read(savedBoringServiceProvider).getSavedBoringActivity();
-      //state = AsyncValue.data(savedBoringActivity);
+      final savedBoringActivity =
+          await read(savedBoringServiceProvider).getSavedBoringActivity();
+      state = AsyncValue.data(savedBoringActivity);
     } on SavedBoringActivityException catch (e) {
       state = AsyncValue.error(e);
     }
@@ -87,10 +86,9 @@ class SavedBoringNotifier
 
   Future<void> refreshSavedList() async {
     try {
-      state = state.whenData(
-          (value) => value.where((element) => element.saved).toList());
-      //final savedBoringActivity = await read(savedBoringServiceProvider).getSavedBoringActivity();
-      //state = AsyncValue.data(savedBoringActivity);
+      final savedBoringActivity =
+          await read(savedBoringServiceProvider).getSavedBoringActivity();
+      state = AsyncValue.data(savedBoringActivity);
     } on SavedBoringActivityException catch (e, st) {
       state = AsyncValue.error(e, st);
     }
@@ -144,6 +142,35 @@ class SavedBoringNotifier
         (value) => value.where((element) => element.key != key).toList());
     try {
       await read(savedBoringServiceProvider).removeSavedBoringActivity(key);
+    } on SavedBoringActivityException catch (e) {
+      _handleException(e);
+    }
+  }
+
+  Future<void> toggleDoneSavedBoringActivity(String key) async {
+    _cacheState();
+
+    state = state.whenData(
+      (value) => value.map((activity) {
+        if (activity.key == key) {
+          return BoringActivity(
+            activity: activity.activity,
+            type: activity.type,
+            participants: activity.participants,
+            price: activity.price,
+            link: activity.link,
+            key: activity.key,
+            accessibility: activity.accessibility,
+            saved: activity.saved,
+            done: !activity.done, //toggles bool to opposite
+          );
+        }
+        return activity;
+      }).toList(),
+    );
+
+    try {
+      await read(savedBoringServiceProvider).toggleDoneSaved(key);
     } on SavedBoringActivityException catch (e) {
       _handleException(e);
     }

@@ -1,13 +1,15 @@
 class BoringActivity {
-  BoringActivity(
-      {this.activity,
-      this.type,
-      this.participants,
-      this.price,
-      this.link,
-      this.key,
-      this.accessibility,
-      this.saved = false});
+  BoringActivity({
+    this.activity,
+    this.type,
+    this.participants,
+    this.price,
+    this.link,
+    this.key,
+    this.accessibility,
+    this.saved = false,
+    this.done = false,
+  });
 
   final String activity;
   final String type;
@@ -17,6 +19,7 @@ class BoringActivity {
   final String key;
   final double accessibility;
   final bool saved;
+  final bool done;
 
   factory BoringActivity.fromJson(Map<String, dynamic> json) => BoringActivity(
         activity: json["activity"] == null ? null : json["activity"],
@@ -32,12 +35,12 @@ class BoringActivity {
       );
 
   Map<String, dynamic> toJson() => {
-    "activity": activity == null ? null : activity,
-    "type": type == null ? null : type,
-    "participants": participants == null ? null : participants,
-    "price": price == null ? null : price,
-    "link": link == null ? null : link,
-    "key": key == null ? null : key,
-    "accessibility": accessibility == null ? null : accessibility,
-  };
+        "activity": activity == null ? null : activity,
+        "type": type == null ? null : type,
+        "participants": participants == null ? null : participants,
+        "price": price == null ? null : price,
+        "link": link == null ? null : link,
+        "key": key == null ? null : key,
+        "accessibility": accessibility == null ? null : accessibility,
+      };
 }

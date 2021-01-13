@@ -9,6 +9,8 @@ abstract class SavedBoringServices {
   Future<List<BoringActivity>> getSavedBoringActivity();
   Future<void> addSavedBoringActivity(BoringActivity boringActivity);
   Future<void> removeSavedBoringActivity(String key);
+
+  Future<void> toggleDoneSaved(String key);
 }
 
 class SavedBoringActivityException implements Exception {
@@ -35,6 +37,7 @@ final _savedBoringActivities = [
     key: "8159356",
     accessibility: 0,
     saved: true,
+    done: false,
   ),
   BoringActivity(
     activity: "Text a friend you haven't talked to in a long time",
@@ -45,7 +48,7 @@ final _savedBoringActivities = [
     key: "6081071",
     accessibility: 0.2,
     saved: true,
-  ),
+      done: false),
 ];
 
 class SavedBoringService implements SavedBoringServices {
@@ -92,7 +95,35 @@ class SavedBoringService implements SavedBoringServices {
     if (random.nextDouble() < errorLikelihood) {
       throw const SavedBoringActivityException('Activity could not be removed');
     } else {
-      savedBoringActivitiesStorage = savedBoringActivitiesStorage.where((e) => e.key != key).toList();
+      savedBoringActivitiesStorage =
+          savedBoringActivitiesStorage.where((e) => e.key != key).toList();
+    }
+  }
+
+  @override
+  Future<void> toggleDoneSaved(String key) async {
+    await _waitRandomTime();
+    if (random.nextDouble() < errorLikelihood) {
+      throw const SavedBoringActivityException(
+          'Activity could not be mark as done');
+    } else {
+      savedBoringActivitiesStorage =
+          savedBoringActivitiesStorage.map((activity) {
+        if (activity.key == key) {
+          return BoringActivity(
+            activity: activity.activity,
+            type: activity.type,
+            participants: activity.participants,
+            price: activity.price,
+            link: activity.link,
+            key: activity.key,
+            accessibility: activity.accessibility,
+            saved: activity.saved,
+            done: !activity.done, //toggles bool to opposite
+          );
+        }
+        return activity;
+      }).toList();
     }
   }
 
