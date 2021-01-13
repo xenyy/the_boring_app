@@ -113,9 +113,9 @@ class SavedBoringNotifier
       state.whenData((saved) {
         if (saved.map((e) => e.key).contains(toSaveActivity.key)) {
           repeated = true;
+          state = AsyncValue.data([...saved]);
           _handleException(
               SavedBoringActivityException('You already saved this activity'));
-          state = AsyncValue.data([...saved]);
         } else {
           state = AsyncValue.data([...saved]..add(toSaveActivity));
         }

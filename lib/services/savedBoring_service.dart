@@ -24,7 +24,7 @@ class SavedBoringActivityException implements Exception {
   }
 }
 
-const double errorLikelihood = 0.8;
+const double errorLikelihood = 0.0;
 
 final _savedBoringActivities = [
   BoringActivity(
