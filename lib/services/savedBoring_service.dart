@@ -7,9 +7,7 @@ final savedBoringServiceProvider = Provider<SavedBoringService>((ref) => SavedBo
 
 abstract class SavedBoringServices {
   Future<List<BoringActivity>> getSavedBoringActivity();
-
   Future<void> addSavedBoringActivity(BoringActivity boringActivity);
-
   Future<void> removeSavedBoringActivity(String key);
 }
 
@@ -76,7 +74,7 @@ class SavedBoringService implements SavedBoringServices {
   Future<void> addSavedBoringActivity(BoringActivity boringActivity) async {
     await _waitRandomTime();
     // add to storage
-    if (random.nextDouble() < 0.0) {
+    if (random.nextDouble() < errorLikelihood) {
       throw const SavedBoringActivityException('Activity could not be saved');
     } else {
       if (savedBoringActivitiesStorage.isNotEmpty) {
@@ -91,7 +89,6 @@ class SavedBoringService implements SavedBoringServices {
   @override
   Future<void> removeSavedBoringActivity(String key) async {
     await _waitRandomTime();
-    // remove from storage
     if (random.nextDouble() < errorLikelihood) {
       throw const SavedBoringActivityException('Activity could not be removed');
     } else {
@@ -102,7 +99,7 @@ class SavedBoringService implements SavedBoringServices {
   // simulate loading
   Future<void> _waitRandomTime() async {
     await Future.delayed(
-      Duration(seconds: random.nextInt(1)), //() {},
+      Duration(seconds: random.nextInt(1)),
     );
   }
 }

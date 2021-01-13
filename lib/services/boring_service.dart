@@ -25,5 +25,4 @@ class BoringService implements BoringServices{
       throw BoringException.fromDioError(dioError);
     }
   }
-
 }
