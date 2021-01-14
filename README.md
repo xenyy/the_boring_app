@@ -18,4 +18,5 @@ I'm new at flutter but I think the code is kinda well written and organized.
 - Mark as done the activities (done)
 - Mark all done option
 - Delete all option (done)
+- Make saved screen with tabs and save toggle as done
 - Media query
