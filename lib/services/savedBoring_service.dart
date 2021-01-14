@@ -3,13 +3,18 @@ import 'dart:math';
 import 'package:the_boring_app/models/boringActivity_model.dart';
 import 'package:flutter_riverpod/all.dart';
 
-final savedBoringServiceProvider = Provider<SavedBoringService>((ref) => SavedBoringService());
+final savedBoringServiceProvider =
+    Provider<SavedBoringService>((ref) => SavedBoringService());
 
 abstract class SavedBoringServices {
   Future<List<BoringActivity>> getSavedBoringActivity();
+
   Future<void> addSavedBoringActivity(BoringActivity boringActivity);
+
   Future<void> removeSavedBoringActivity(String key);
+
   Future<void> toggleDoneSaved(String key);
+
   Future<void> deleteAllSaved();
 }
 
@@ -24,10 +29,10 @@ class SavedBoringActivityException implements Exception {
   }
 }
 
-const double errorLikelihood = 0.0;
+const double errorLikelihood = 0.4;
 
 final _savedBoringActivities = [
-  BoringActivity(
+  /*BoringActivity(
     activity: "Explore a park you have never been to before",
     type: "recreational",
     participants: 1,
@@ -47,7 +52,8 @@ final _savedBoringActivities = [
     key: "6081071",
     accessibility: 0.2,
     saved: true,
-      done: false),
+    done: false,
+    ),*/
 ];
 
 class SavedBoringService implements SavedBoringServices {
@@ -98,6 +104,7 @@ class SavedBoringService implements SavedBoringServices {
   Future<void> toggleDoneSaved(String key) async {
     await _waitRandomTime();
     if (random.nextDouble() < errorLikelihood) {
+      //I dont think is necessary this error here IDK
       throw const SavedBoringActivityException('Activity could not be toggled');
     } else {
       savedBoringActivitiesStorage =
@@ -134,7 +141,7 @@ class SavedBoringService implements SavedBoringServices {
   // simulate loading
   Future<void> _waitRandomTime() async {
     await Future.delayed(
-      Duration(seconds: random.nextInt(1)),
+      Duration(seconds: random.nextInt(3)),
     );
   }
 }

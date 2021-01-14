@@ -27,7 +27,8 @@ class AppTheme {
       filled: true,
       contentPadding: EdgeInsets.all(10),
     ),
-    primaryColor: Colors.white,//Color(kMainColor),
+    primaryColor: Colors.white,
+    //Color(kMainColor),
     accentColor: Color(kAccentColor),
     appBarTheme: AppBarTheme(
       brightness: Brightness.light,
@@ -35,7 +36,9 @@ class AppTheme {
       iconTheme: IconThemeData(color: Colors.black54),
       color: Colors.white,
       textTheme: TextTheme(
-        bodyText1: TextStyle(color: Color(0xFF0E0E0E)),
+        bodyText1: TextStyle(
+          color: Color(0xFF0E0E0E),
+        ),
         headline6: TextStyle(
           color: Color(0xFF0E0E0E),
           fontWeight: FontWeight.bold,
@@ -68,9 +71,10 @@ class AppTheme {
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Color(0xFF0E0E0E),
     textSelectionTheme: TextSelectionThemeData(
-        cursorColor: Color(kMainColor),
-        selectionColor: Color(kMainColor),
-        selectionHandleColor: Color(kMainColor)),
+      cursorColor: Color(kMainColor),
+      selectionColor: Color(kMainColor),
+      selectionHandleColor: Color(kMainColor),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: TextStyle(fontSize: 14),
       border: OutlineInputBorder(
@@ -91,7 +95,9 @@ class AppTheme {
       color: Color(0xFF131313),
       iconTheme: IconThemeData(color: Colors.white54),
       textTheme: TextTheme(
-        bodyText1: TextStyle(color: Color(0xFFF8F8FA)),
+        bodyText1: TextStyle(
+          color: Color(0xFFF8F8FA),
+        ),
         headline6: TextStyle(
           color: Color(0xFFF8F8FA),
           fontWeight: FontWeight.bold,
@@ -113,7 +119,9 @@ class AppTheme {
       ),
     ),
     canvasColor: Color(0xFF121212),
-    iconTheme: IconThemeData(color: Colors.white54),
+    iconTheme: IconThemeData(
+      color: Colors.white54,
+    ),
     colorScheme: ColorScheme.dark(
       brightness: Brightness.dark,
     ),

@@ -105,7 +105,9 @@ class BoredApiCredits extends StatelessWidget {
       padding: EdgeInsets.only(top: 20, left: 120, right: 120),
       child: FlatButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        onPressed: () {},
+        onPressed: () {
+          //
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -118,8 +120,9 @@ class BoredApiCredits extends StatelessWidget {
             Text(
               'Bored Api',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.headline6.color),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.headline6.color,
+              ),
             ),
           ],
         ),
@@ -191,7 +194,8 @@ class BoringTextActivity extends StatelessWidget {
                     return _Error(message: e.message);
                   }
                   return _Error(
-                      message: 'Oh no! Something unexpected happened');
+                    message: 'Oh no! Something unexpected happened',
+                  );
                 },
               );
             },
@@ -294,24 +298,27 @@ class BoringButtonSave extends StatelessWidget {
         context
             .read(savedBoringActivityProvider)
             .getSavedBoringActivities()
-            .whenComplete(() {
-          context.read(savedBoringActivityProvider).addSavedBoringActivity();
-          Flushbar(
-            message: 'Activity saved',
-            //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-            icon: Icon(
-              Icons.tag_faces_rounded,
-              size: 27.0,
-              color: Theme.of(context).colorScheme.background.withOpacity(0.5),
-            ),
-            flushbarStyle: FlushbarStyle.FLOATING,
-            margin: EdgeInsets.all(20),
-            borderRadius: 8,
-            duration: Duration(seconds: 3),
-            animationDuration: Duration(milliseconds: 200),
-            leftBarIndicatorColor: Colors.green,
-          )..show(context);
-        });
+            .whenComplete(
+          () {
+            context.read(savedBoringActivityProvider).addSavedBoringActivity();
+            Flushbar(
+              message: 'Activity saved',
+              //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+              icon: Icon(
+                Icons.tag_faces_rounded,
+                size: 27.0,
+                color:
+                    Theme.of(context).colorScheme.background.withOpacity(0.5),
+              ),
+              flushbarStyle: FlushbarStyle.FLOATING,
+              margin: EdgeInsets.all(20),
+              borderRadius: 8,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 200),
+              leftBarIndicatorColor: Colors.green,
+            )..show(context);
+          },
+        );
       },
       child: Icon(
         Icons.bookmark,
