@@ -163,25 +163,45 @@ class DeleteAllAlertDialog extends StatelessWidget {
                 TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
           ),
           onPressed: () {
-            context
-                .read(savedBoringActivityProvider)
-                .deleteAllSaved()
-                .whenComplete(() => Flushbar(
-                      message: 'All activities deleted',
-                      //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                      icon: Icon(
-                        Icons.delete_forever_rounded,
-                        size: 27.0,
-                        color: Colors.redAccent,
-                      ),
-                      flushbarStyle: FlushbarStyle.FLOATING,
-                      margin: EdgeInsets.all(20),
-                      borderRadius: 8,
-                      duration: Duration(seconds: 3),
-                      animationDuration: Duration(milliseconds: 200),
-                      leftBarIndicatorColor: Colors.redAccent,
-                    )..show(context));
             Navigator.of(context).pop();
+            context.read(savedProvider).whenData((value) {
+              if (value.isEmpty) {
+                Flushbar(
+                  message: 'There are no activities to deleted',
+                  //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  icon: Icon(
+                    Icons.warning_amber_rounded,
+                    size: 27.0,
+                    color: Colors.amber,
+                  ),
+                  flushbarStyle: FlushbarStyle.FLOATING,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: 8,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 200),
+                  leftBarIndicatorColor: Colors.amber,
+                )..show(context);
+              } else {
+                context
+                    .read(savedBoringActivityProvider)
+                    .deleteAllSaved()
+                    .whenComplete(() => Flushbar(
+                          message: 'All activities deleted',
+                          //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                          icon: Icon(
+                            Icons.delete_forever_rounded,
+                            size: 27.0,
+                            color: Colors.redAccent,
+                          ),
+                          flushbarStyle: FlushbarStyle.FLOATING,
+                          margin: EdgeInsets.all(20),
+                          borderRadius: 8,
+                          duration: Duration(seconds: 3),
+                          animationDuration: Duration(milliseconds: 200),
+                          leftBarIndicatorColor: Colors.redAccent,
+                        )..show(context));
+              }
+            });
           },
         ),
         FlatButton(
