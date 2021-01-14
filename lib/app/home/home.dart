@@ -295,28 +295,9 @@ class BoringButtonSave extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(vertical: 15),
       onPressed: () {
-        context
-            .read(savedBoringActivityProvider)
-            .getSavedBoringActivities()
-            .whenComplete(
-          () {
+        context.read(savedBoringActivityProvider.state).whenData(
+          (listSaved) {
             context.read(savedBoringActivityProvider).addSavedBoringActivity();
-            Flushbar(
-              message: 'Activity saved',
-              //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-              icon: Icon(
-                Icons.tag_faces_rounded,
-                size: 27.0,
-                color:
-                    Theme.of(context).colorScheme.background.withOpacity(0.5),
-              ),
-              flushbarStyle: FlushbarStyle.FLOATING,
-              margin: EdgeInsets.all(20),
-              borderRadius: 8,
-              duration: Duration(seconds: 3),
-              animationDuration: Duration(milliseconds: 200),
-              leftBarIndicatorColor: Colors.green,
-            )..show(context);
           },
         );
       },

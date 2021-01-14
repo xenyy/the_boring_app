@@ -114,8 +114,6 @@ class SavedBoringNotifier
         if (saved.map((e) => e.key).contains(toSaveActivity.key)) {
           repeated = true;
           state = AsyncValue.data([...saved]);
-          _handleException(
-              SavedBoringActivityException('You already saved this activity'));
         } else {
           state = AsyncValue.data([...saved]..add(toSaveActivity));
         }
@@ -123,9 +121,12 @@ class SavedBoringNotifier
     });
 
     try {
-      if (!repeated) {
+      if (repeated == false) {
         await read(savedBoringServiceProvider)
             .addSavedBoringActivity(toSaveActivity);
+      } else {
+        _handleException(
+            SavedBoringActivityException('You already saved this activity'));
       }
     } on SavedBoringActivityException catch (e) {
       _handleException(e);
