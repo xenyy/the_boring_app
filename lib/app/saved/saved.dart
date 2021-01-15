@@ -102,8 +102,8 @@ class _SavedScreenState extends State<SavedScreen> {
         context
             .read(savedBoringActivityProvider)
             .removeSavedBoringActivity(itemKey)
-            .whenComplete(
-              () => Flushbar(
+            .then(
+              (_) => Flushbar(
                 message: 'Activity deleted',
                 //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
                 icon: Icon(
@@ -186,8 +186,8 @@ class DeleteAllAlertDialog extends StatelessWidget {
                   context
                       .read(savedBoringActivityProvider)
                       .deleteAllSaved()
-                      .whenComplete(
-                        () => Flushbar(
+                      .then(
+                        (_) => Flushbar(
                           message: 'All activities deleted',
                           //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
                           icon: Icon(
