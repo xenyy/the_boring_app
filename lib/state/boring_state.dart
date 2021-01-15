@@ -38,13 +38,6 @@ class BoringNotifier extends StateNotifier<AsyncValue<BoringActivity>> {
   }
 }
 
-//saved
-final savedProvider = Provider<AsyncValue<List<BoringActivity>>>((ref) {
-  final savedState = ref.watch(savedBoringActivityProvider.state);
-  return savedState.whenData(
-      (saved) => saved.where((savedState) => savedState.saved).toList());
-});
-
 final savedBoringActivityProvider = StateNotifierProvider<SavedBoringNotifier>(
     (ref) => SavedBoringNotifier(ref.read));
 

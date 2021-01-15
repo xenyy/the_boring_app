@@ -57,7 +57,7 @@ class _SavedScreenState extends State<SavedScreen> {
                   context.read(savedBoringActivityProvider).refreshSavedList(),
               child: Consumer(
                 builder: (context, watch, child) {
-                  final saved = watch(savedProvider);
+                  final saved = watch(savedBoringActivityProvider.state);
                   return saved.when(
                     data: (saved) {
                       if (saved.isEmpty) {
@@ -101,24 +101,24 @@ class _SavedScreenState extends State<SavedScreen> {
       case DismissDirection.endToStart:
         context
             .read(savedBoringActivityProvider)
-            .removeSavedBoringActivity(itemKey)
-            .then(
-              (_) => Flushbar(
-                message: 'Activity deleted',
-                //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                icon: Icon(
-                  Icons.delete_forever_rounded,
-                  size: 27.0,
-                  color: Colors.redAccent,
-                ),
-                flushbarStyle: FlushbarStyle.FLOATING,
-                margin: EdgeInsets.all(20),
-                borderRadius: 8,
-                duration: Duration(seconds: 3),
-                animationDuration: Duration(milliseconds: 200),
-                leftBarIndicatorColor: Colors.redAccent,
-              )..show(context),
-            );
+            .removeSavedBoringActivity(itemKey);
+        //.then(
+        //  (_) => Flushbar(
+        //    message: 'Activity deleted',
+        //    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+        //    icon: Icon(
+        //      Icons.delete_forever_rounded,
+        //      size: 27.0,
+        //      color: Colors.redAccent,
+        //    ),
+        //    flushbarStyle: FlushbarStyle.FLOATING,
+        //    margin: EdgeInsets.all(20),
+        //    borderRadius: 8,
+        //    duration: Duration(seconds: 3),
+        //    animationDuration: Duration(milliseconds: 200),
+        //    leftBarIndicatorColor: Colors.redAccent,
+        //  )..show(context),
+        //);
 
         break;
       default:
@@ -164,45 +164,43 @@ class DeleteAllAlertDialog extends StatelessWidget {
           ),
           onPressed: () {
             Navigator.of(context).pop();
-            context.read(savedProvider).whenData(
+            context.read(savedBoringActivityProvider.state).whenData(
               (value) {
                 if (value.isEmpty) {
-                  Flushbar(
-                    message: 'There are no activities to deleted',
-                    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                    icon: Icon(
-                      Icons.warning_amber_rounded,
-                      size: 27.0,
-                      color: Colors.amber,
-                    ),
-                    flushbarStyle: FlushbarStyle.FLOATING,
-                    margin: EdgeInsets.all(20),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                    animationDuration: Duration(milliseconds: 200),
-                    leftBarIndicatorColor: Colors.amber,
-                  )..show(context);
+                  //Flushbar(
+                  //  message: 'There are no activities to deleted',
+                  //  //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  //  icon: Icon(
+                  //    Icons.warning_amber_rounded,
+                  //    size: 27.0,
+                  //    color: Colors.amber,
+                  //  ),
+                  //  flushbarStyle: FlushbarStyle.FLOATING,
+                  //  margin: EdgeInsets.all(20),
+                  //  borderRadius: 8,
+                  //  duration: Duration(seconds: 3),
+                  //  animationDuration: Duration(milliseconds: 200),
+                  //  leftBarIndicatorColor: Colors.amber,
+                  //)..show(context);
                 } else {
-                  context
-                      .read(savedBoringActivityProvider)
-                      .deleteAllSaved()
-                      .then(
-                        (_) => Flushbar(
-                          message: 'All activities deleted',
-                          //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                          icon: Icon(
-                            Icons.delete_forever_rounded,
-                            size: 27.0,
-                            color: Colors.redAccent,
-                          ),
-                          flushbarStyle: FlushbarStyle.FLOATING,
-                          margin: EdgeInsets.all(20),
-                          borderRadius: 8,
-                          duration: Duration(seconds: 3),
-                          animationDuration: Duration(milliseconds: 200),
-                          leftBarIndicatorColor: Colors.redAccent,
-                        )..show(context),
-                      );
+                  context.read(savedBoringActivityProvider).deleteAllSaved();
+                  //.then(
+                  //  (_) => Flushbar(
+                  //    message: 'All activities deleted',
+                  //    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                  //    icon: Icon(
+                  //      Icons.delete_forever_rounded,
+                  //      size: 27.0,
+                  //      color: Colors.redAccent,
+                  //    ),
+                  //    flushbarStyle: FlushbarStyle.FLOATING,
+                  //    margin: EdgeInsets.all(20),
+                  //    borderRadius: 8,
+                  //    duration: Duration(seconds: 3),
+                  //    animationDuration: Duration(milliseconds: 200),
+                  //    leftBarIndicatorColor: Colors.redAccent,
+                  //  )..show(context),
+                  //);
                 }
               },
             );
@@ -270,44 +268,43 @@ class SavedActivity extends StatelessWidget {
           onChanged: (_) {
             context
                 .read(savedBoringActivityProvider)
-                .toggleDoneSavedBoringActivity(item.key)
-                .whenComplete(
-              () {
-                if (!item.done) {
-                  Flushbar(
-                    message: 'Activity done',
-                    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                    icon: Icon(
-                      Icons.done_all_rounded,
-                      size: 27.0,
-                      color: Colors.green,
-                    ),
-                    flushbarStyle: FlushbarStyle.FLOATING,
-                    margin: EdgeInsets.all(20),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                    animationDuration: Duration(milliseconds: 200),
-                    leftBarIndicatorColor: Colors.green,
-                  )..show(context);
-                } else {
-                  Flushbar(
-                    message: 'Activity undone',
-                    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                    icon: Icon(
-                      Icons.clear,
-                      size: 27.0,
-                      color: Colors.amber,
-                    ),
-                    flushbarStyle: FlushbarStyle.FLOATING,
-                    margin: EdgeInsets.all(20),
-                    borderRadius: 8,
-                    duration: Duration(seconds: 3),
-                    animationDuration: Duration(milliseconds: 200),
-                    leftBarIndicatorColor: Colors.amber,
-                  )..show(context);
-                }
-              },
-            );
+                .toggleDoneSavedBoringActivity(item.key);
+            //.whenComplete(() {
+            //if (!item.done) {
+            //  Flushbar(
+            //    message: 'Activity done',
+            //    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+            //    icon: Icon(
+            //      Icons.done_all_rounded,
+            //      size: 27.0,
+            //      color: Colors.green,
+            //    ),
+            //    flushbarStyle: FlushbarStyle.FLOATING,
+            //    margin: EdgeInsets.all(20),
+            //    borderRadius: 8,
+            //    duration: Duration(seconds: 3),
+            //    animationDuration: Duration(milliseconds: 200),
+            //    leftBarIndicatorColor: Colors.green,
+            //  )..show(context);
+            //} else {
+            //  Flushbar(
+            //    message: 'Activity undone',
+            //    //backgroundColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+            //    icon: Icon(
+            //      Icons.clear,
+            //      size: 27.0,
+            //      color: Colors.amber,
+            //    ),
+            //    flushbarStyle: FlushbarStyle.FLOATING,
+            //    margin: EdgeInsets.all(20),
+            //    borderRadius: 8,
+            //    duration: Duration(seconds: 3),
+            //    animationDuration: Duration(milliseconds: 200),
+            //    leftBarIndicatorColor: Colors.amber,
+            //  )..show(context);
+            //}
+            //},
+            //);
           },
         ),
         focusColor: Colors.red,
